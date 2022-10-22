@@ -1,0 +1,282 @@
+Q - SIZE OF A BINARY TREE
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node 
+{
+
+    int data;
+
+    struct node* left;
+
+    struct node* right;
+};
+ 
+
+struct node* newNode(int data) 
+{
+
+  struct node* node = (struct node*)
+
+                       malloc(sizeof(struct node));
+
+  node->data = data;
+
+  node->left = NULL;
+
+  node->right = NULL;
+
+   
+
+  return(node);
+}
+
+
+int size(struct node* node) 
+{  
+
+  if (node==NULL) 
+
+    return 0;
+
+  else    
+
+    return(size(node->left) + 1 + size(node->right));  
+}
+
+int main()
+{
+
+  struct node *root = newNode(1);
+
+  root->left        = newNode(2);
+
+  root->right       = newNode(3);
+
+  root->left->left  = newNode(4);
+
+  root->left->right = newNode(5);   
+ 
+
+  printf("Size of the tree is %d", size(root));  
+
+  getchar();
+  return 0;
+}
+
+
+Q - Searching in a element in a binary tree
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node {
+    int item;
+    struct node* left;
+    struct node* right;
+
+} Node;
+
+void AddNode(Node** root, int item)
+{
+    Node* temp = *root;
+    Node* prev = *root;
+
+    if (*root == NULL) {
+        root = (Node)malloc(sizeof(Node));
+
+        (*root)->item = item;
+        (*root)->left = (*root)->right = NULL;
+    }
+    else {
+        while (temp != NULL) {
+            if (item > temp->item) {
+                prev = temp;
+                temp = temp->right;
+            }
+            else {
+                prev = temp;
+                temp = temp->left;
+            }
+        }
+        temp = (Node*)malloc(sizeof(Node));
+        temp->item = item;
+
+        if (item >= prev->item)
+            prev->right = temp;
+        else
+            prev->left = temp;
+    }
+}
+
+void DFS(Node* root)
+{
+    if (root) {
+        if (root->left)
+            DFS(root->left);
+
+        if (root->right)
+            DFS(root->right);
+
+        printf("%d  ", root->item);
+    }
+}
+
+int search(Node* root, int item)
+{
+    while (root != NULL) {
+        if (item > root->item)
+            root = root->right;
+        else if (item < root->item)
+            root = root->left;
+        else
+            return 1;
+    }
+    return 0;
+}
+
+int main()
+{
+
+    struct node* head = NULL;
+
+    AddNode(&head, 10);
+    AddNode(&head, 20);
+    AddNode(&head, 40);
+    AddNode(&head, 30);
+    AddNode(&head, 60);
+
+    printf("Tree Items:\n");
+    DFS(head);
+    printf("\n");
+
+    if (search(head, 70))
+        printf("%d item found in tree.\n", 70);
+    else
+        printf("%d item not found in tree.\n", 70);
+
+    if (search(head, 40))
+        printf("%d item found in tree.\n", 40);
+    else
+        printf("%d item not found in tree.\n", 40);
+
+    return 0;
+}
+
+
+Q - deleting a tree
+#include<stdio.h>
+#include<stdlib.h>
+struct node {
+   int data;
+   struct node* left;
+   struct node* right;
+};
+struct node* addnode(int data) {
+   struct node* node = (struct node*)
+      malloc(sizeof(struct node));
+   node->data = data;
+   node->left = NULL;
+   node->right = NULL;
+   return(node);
+}
+void nodedel(struct node* node) {
+   if (node == NULL) return;
+   nodedel(node->left);
+   nodedel(node->right);
+   printf("Node deleted, value is %d", node->data);
+   free(node);
+}
+int main() {
+   struct node *root = addnode(9);
+   root->left = addnode(4);
+   root->right = addnode(15);
+   root->left->left = addnode(2);
+   root->left->right = addnode(6);
+   root->right->left = addnode(12);
+   root->right->right = addnode(17);
+   nodedel(root);
+   root = NULL;
+   printf(" Tree deleted ");
+   return 0;
+}
+ Q - finding maximum numbers in binary tree
+ 
+ 
+ #include <stdio.h>
+#include <stdlib.h>
+
+
+struct Node {
+
+    int data;
+
+    struct Node *left, *right;
+};
+
+
+struct Node* newNode(int data)
+{
+
+    struct Node* node
+
+        = (struct Node*)malloc(sizeof(struct Node));
+
+    node->data = data;
+
+    node->left = node->right = NULL;
+
+    return (node);
+}
+ 
+
+int findMax(struct Node* root)
+{
+
+
+    if (root == NULL)
+ 
+
+    int res = root->data;
+
+    int lres = findMax(root->left);
+
+    int rres = findMax(root->right);
+
+    if (lres>res)
+
+        res=lres;
+
+    if (rres > res)
+
+        res=rres;
+
+    return res;
+}
+
+int main(void)
+{
+
+    struct Node* NewRoot = NULL;
+
+    struct Node* root = newNode(2);
+
+    root->left = newNode(7);
+
+    root->right = newNode(5);
+
+    root->left->right = newNode(6);
+
+    root->left->right->left = newNode(1);
+
+    root->left->right->right = newNode(11);
+
+    root->right->right = newNode(9);
+
+    root->right->right->left = newNode(4);
+ 
+
+    printf("Maximum element is %d \n", findMax(root));
+ 
+
+    return 0;
+}
